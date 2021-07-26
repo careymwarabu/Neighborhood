@@ -2,7 +2,7 @@
 # Author
 Caryne Mwarabu
 # Description
-The Project enables uses to get an update of the neighborhood.
+The Project enables users to get an update of the neighborhood.
 # Installation Instruction
 To get the code..
 
