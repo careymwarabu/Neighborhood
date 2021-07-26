@@ -1,0 +1,66 @@
+{%extends 'base.html'%}
+{% load static%}
+
+{% block styles %}
+{% endblock  %}
+
+{% block content %}
+
+<div class="container">
+  <h2 class="pt-4">List of Business</h2>
+  <div class="row">
+    {% for business in businesses %}
+    <div class="col-sm-12 col-md-6 pt-4">
+      <div class="card">
+      <h5 class="card-title">
+        <a href="{% url 'get_business' business.id %}">
+          {{business.name}}
+        </a>
+      </h5>
+        
+        <div class="card-body">
+          <p class="card-test">{{business.description}}</p>
+          <p>
+            <img class="rounded-circle" style="width: 1.5em; height: 1.5em" src="{{business.user.profile.photo.url}}" alt="">
+            <a href="{% url 'user_page' business.user.id %}">
+              <span>By:{{business.user.username}}</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+      {% endfor %}
+  </div>
+</div>
+<div class="container">
+  <h2 class="pt-4">Current updates</h2>
+  <div class="row">
+    {% for post in posts %}
+    <div class="col-sm-12 col-md-6 pt-4">
+      <div class="card">
+      <h5 class="card-title">
+            <a href="{% url 'get_post' post.id %}">
+              {{post.title}}
+            </a>
+          </h5>
+        
+        <div class="card-body">
+          <p class="card-test">{{post.content}}</p>
+          <p>
+            <img class="rounded-circle" style="width: 1.5em; height: 1.5em" src="{{post.user.profile.photo.url}}" alt="">
+            <a href="{% url 'user_page' post.user.id %}">
+              <span>By:{{post.user.username}}</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+{% endblock  %}

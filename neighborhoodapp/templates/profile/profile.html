@@ -1,0 +1,33 @@
+{%extends 'base.html'%}
+{% load static%}
+
+
+{% block styles %}
+
+{% endblock  %}
+{% block content %}
+<header class="pt-4">
+  <div class="container">
+    <div class="profile">
+      <div class="profile-image">
+        <img src="{{profile.photo.url}}" style="height: 120px; width: 120px;" alt="">
+      </div>
+      <div class="profile-user-settings">
+        <h1 class="profile-user-name">{{profile.user.username}}</h1>
+        {% if request.user == profile.user  %}
+        <button class="btn profile-edit-btn"> <a href="{% url 'account' %}">Edit Profile</a></button>
+        {% endif %}
+      </div>
+      <div class="profile-bio">
+        <p> {{profile.bio}}</p>
+      </div>
+      <div class="location">
+        <h4>Neighborhood</h4>
+        <p> {{profile.neighborhood}}</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+{% endblock %}

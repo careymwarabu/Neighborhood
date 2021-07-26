@@ -1,78 +1,94 @@
 from django.db import models
 from django.contrib.auth.models import User
-import datetime as dt
-from tinymce.models import HTMLField
 from cloudinary.models import CloudinaryField
-from django.db import IntegrityError
-
 
 # Create your models here.
-class Neighbourhood(models.Model):
-    name = models.CharField(max_length= 60)
-    location = models.CharField(max_length=50)
-    count = models.IntegerField(null=False)
-    admin = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
 
+class Neighborhood(models.Model):
+    name = models.CharField(max_length=30)
+    location = models.CharField(max_length=50)
+    neighborhood_description=models.TextField() 
+    occupants_count=models.IntegerField(default=0)
+    
     def __str__(self):
         return self.name
-
-    def create_neighbourhood(self):
-        self.save()
-        
+      
+    def save_neighborhood(self):
+      self.save()
+      
+    def delete_neighborhood(self):
+      self.delete()  
+      
     @classmethod
-    def delete_neighbourhood(cls, name):
-        cls.objects.filter(name=name).delete()
-
+    def find_neighborhood(cls, name):
+      return cls.objects.filter(name_icontains=name) 
+    
     @classmethod
-    def find_neighbourhood(cls, search_term):
-        search_results = cls.objects.filter(name__icontains = search_term)
-        return search_results
-
-    def update_neighbourhood(self,name):
-        self.name = name
-        self.save()
+    def update_neighborhood(cls, id, name, occupants_count, location):
+      update = cls.objects.filter(id=id).update(name=name, occupants_count=occupants_count, location=location)
+      return update 
 
 class Profile(models.Model):
-    username = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    bio = HTMLField()
-    neighbourhood = models.ForeignKey(Neighbourhood, on_delete=models.CASCADE)
-    prof_pic = CloudinaryField('image')
+  photo=CloudinaryField('image', blank=True)
+  bio=models.TextField(max_length=1000, default='No Bio')
+  user=models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+  neighborhood=models.ForeignKey(Neighborhood, on_delete=models.CASCADE, null=True)
 
-    def __str__(self):
-        return self.name
+  def save_profile(self):
+        self.save()
+  def delete_profile(self):
+        self.delete()
+  @classmethod
+  def update_profile(cls, profile_id, bio, photo):
+        profile = cls.objects.filter(pk=profile_id).update(bio=bio,photo=photo)
+        return profile
+  @classmethod
+  def get_profile(cls,username):
+        profile = cls.objects.filter(user__username__icontains=username)
+        return profile
+
 
 class Business(models.Model):
-    description = HTMLField()
-    neighbourhood = models.ForeignKey(Neighbourhood, on_delete=models.CASCADE)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    address = models.CharField(max_length=100)
-    contact = models.IntegerField()
+    name=models.CharField(max_length=50)
+    description=models.TextField()
+    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='business_user',null=True)
+    email=models.EmailField()
+    neighborhood=models.ForeignKey(Neighborhood,on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+      return self.name
 
-    def create_business(self):
-        self.save()
+    def save_business(self):
+      self.save()
 
     def delete_business(self):
-        self.delete()
-
+      self.delete()
+        
     @classmethod
-    def search_business(cls, name):
-        return cls.objects.filter(name__icontains=name).all()
-
+    def find_business(cls, name):
+      return cls.objects.filter(name_icontains=name) 
     
-class Post(models.Model):
-    title = models.CharField(max_length=150)
-    image = CloudinaryField('image')
-    post = HTMLField()
-    username = models.ForeignKey(User, on_delete=models.CASCADE)
-    neighbourhood = models.ForeignKey(Neighbourhood, on_delete=models.CASCADE)
-    post_date = models.DateTimeField(auto_now_add=True)
+    @classmethod
+    def update_business(cls, id, name, email):
+      update = cls.objects.filter(id=id).update(name=name, email=email)
+      return update 
 
-    def __str__(self):
-        return self.title
+class Post(models.Model):
+  title=models.CharField(max_length=100)
+  content=models.TextField()
+  pub_date=models.DateTimeField(auto_now_add=True)
+  user=models.ForeignKey(User,on_delete=models.CASCADE,null=True)
+  neighborhood=models.ForeignKey(Neighborhood,on_delete=models.CASCADE,null=True)
+
+  def __str__(self):
+    return self.title
+  def save_post(self):
+      self.save()
+
+  def delete_post(self):
+      self.delete()
+    
+  @classmethod
+  def update_post(cls, id, title, content):
+      update = cls.objects.filter(id=id).update(title=title, content=content)
+      return update 

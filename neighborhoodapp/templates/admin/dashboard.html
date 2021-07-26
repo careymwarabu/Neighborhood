@@ -1,0 +1,65 @@
+{%extends 'base.html'%}
+{% load static%}
+
+
+{% block styles %}
+
+{% endblock  %}
+{% block content %}
+<div class="container pt-4">
+  <div class="row">
+    <div class="col-md-12">
+      <h5>Neighborhood</h5>
+      <a class="btn btn-sm btn-success" href="{% url 'add_neighborhood' %}">Add neighborhood</a>
+      <hr>
+      <div class="card card-body">
+        <table class="table table-sm">
+          <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Occupants</th>
+            <th>Remove</th>
+          </tr>
+          {% for neighborhood in neighborhoods %}
+          <tr>
+            <td>{{neighborhood.name}}</td>
+            <td>{{neighborhood.location}}</td>
+            <td>{{neighborhood.occupants_count}}</td>
+            <td><a class="btn btn-sm btn-danger" href="{% url 'delete_neighborhood' neighborhood.id %}">Delete</a></td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+</div>
+<div class="container pt-4">
+  <h5>Post</h5>
+  <hr>
+  <div class="row gx-5">
+    {% for post in posts %}
+    <div class="col-sm-12 col-md-6 pt-4">
+      <div class="card">
+      <h5 class="card-title">
+            <a href="{% url 'get_post' post.id %}">
+              {{post.title}}
+            </a>
+          </h5>
+        
+        <div class="card-body">
+          <p class="card-test">{{post.content}}</p>
+          <p>
+            <img class="rounded-circle" style="width: 1.5em; height: 1.5em" src="{{post.user.profile.photo.url}}" alt="">
+            <a href="">
+              <span>By:{{post.user.username}}</span>
+            </a>
+          </p>
+          <a class="btn btn-sm btn-danger" href="{% url 'delete_post' post.id %}">Delete</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+{% endblock %}

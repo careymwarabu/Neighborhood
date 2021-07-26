@@ -1,0 +1,36 @@
+{%extends 'base.html'%}
+{% load static%}
+
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock  %}
+{% block content %}
+<div class="container">
+  <div class="row gx-5">
+    {% for post in posts %}
+    <div class="col-sm-12 col-md-6 pt-4">
+      <div class="card">
+      <h5 class="card-title">
+            <a href="{% url 'get_post' post.id %}">
+              {{post.title}}
+            </a>
+          </h5>
+        
+        <div class="card-body">
+          <p class="card-test">{{post.content}}</p>
+          <p>
+            <img class="rounded-circle" style="width: 1.5em; height: 1.5em" src="{{post.user.profile.photo.url}}" alt="">
+            <a href="">
+              <span>By:{{post.user.username}}</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+{% endblock %}

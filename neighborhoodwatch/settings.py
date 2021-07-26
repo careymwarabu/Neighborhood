@@ -16,6 +16,13 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
+cloudinary.config(
+    cloud_name='dvnq8iwfs',
+    api_key='654829185384754',
+    api_secret='W6PpdAIj131akBUwlCY0ffQmjK8',
+)
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,8 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'neighborhoodapp.apps.NeighborhoodappConfig',
-    'cloudinary'
-    'tinymce',
+    'cloudinary',
+    'cloudinary_storage',
 
 ]
 
@@ -115,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 

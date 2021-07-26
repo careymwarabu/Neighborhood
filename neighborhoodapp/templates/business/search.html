@@ -1,0 +1,64 @@
+{%extends 'base.html'%}
+{% load static%}
+
+
+{% block styles %}
+{% endblock  %}
+{% block content %}
+<div class="container pt-4">
+  <form method="get">
+    <div class="input-group mb-3">
+      {{myFilter.form}}
+      <button class="btn btn-outline-secondary" type="submit" >Search</button>
+    </div>
+  </form>
+</div>
+<div class="container">
+  <div class="row gx-5">
+    {% if businesses %}
+    {% for business in businesses %}
+    <div class="col-6 pt-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a href="{% url 'get_business' business.id %}">
+              {{business.name}}
+            </a>
+          </h5>
+          <p class="card-test">{{business.description}}</p>
+          <p>
+            <img class="rounded-circle" style="width: 1.5em; height: 1.5em" src="{{business.user.profile.photo.url}}" alt="">
+            <a href="{% url 'user_page' business.user.id%}">
+              <span>By:{{business.user.username}}</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <h3>There is no business with that query</h3>
+    {% endif %}
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block script %}
+<script>
+  var form_fields = document.getElementsByTagName('input')
+  var form_select = document.getElementsByTagName('select')
+  var form_label = document.getElementsByTagName('label')
+
+  for (var field in form_fields){	
+			form_fields[field].className += ' form-control'
+		}
+  for (var field in form_select){	
+			form_select[field].className += ' form-select'
+	}
+  for (var field in form_label){	
+			form_label[field].className += ' form-label'
+	}
+</script>
+{% endblock  %}
